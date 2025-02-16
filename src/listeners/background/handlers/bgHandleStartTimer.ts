@@ -1,10 +1,10 @@
-import { getFormattedTimeRemaining } from '../../../components/popup/TimerPopup/getFormattedTimeRemaining/getFormattedTimeRemaining'
-import { startAudio } from '../../../components/popup/TimerPopup/startAudio/startAudio'
+import { getFormattedTimeRemaining } from '../../../components/popup/PopupContent/getFormattedTimeRemaining/getFormattedTimeRemaining'
+import { getGeolocation } from '../../../components/popup/PopupContent/getGeolocation/getGeolocation'
 
 let interval: NodeJS.Timeout | null = null
 let remainingMs = 0
 
-export const bgHandleStartTimer = (totalMillis: number) => {
+export const bgSetupGeolocation = (totalMillis: number) => {
   if (interval) {
     clearInterval(interval)
   }
@@ -27,7 +27,7 @@ export const bgHandleStartTimer = (totalMillis: number) => {
       chrome.action.setBadgeBackgroundColor({
         color: '#ff0000',
       })
-      startAudio()
+      getGeolocation()
     }
   }, 1000)
 }

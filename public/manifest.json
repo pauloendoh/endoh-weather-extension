@@ -35,6 +35,7 @@
     "webRequest",
     "webNavigation",
 
+    "geolocation",
     "contextMenus",
     "offscreen"
   ],
