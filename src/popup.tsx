@@ -8,7 +8,7 @@ import { myTheme } from './utils/myTheme'
 
 const Popup = () => {
   return (
-    <Paper sx={{ width: 300, minHeight: 300, padding: 16 }}>
+    <Paper sx={{ width: 300 }}>
       <PopupContent />
     </Paper>
   )

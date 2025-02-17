@@ -17,6 +17,7 @@ export const setSync = <T>(key: string, value: T) => {
   return new Promise<T>((resolve, reject) => {
     chrome.storage.sync.set({ [key]: value }, () => {
       if (chrome.runtime.lastError) {
+        console.log('chrome.runtime.lastError', chrome.runtime.lastError)
         reject(chrome.runtime.lastError)
       } else {
         resolve(value)

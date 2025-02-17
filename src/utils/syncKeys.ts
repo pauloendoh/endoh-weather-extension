@@ -1,6 +1,4 @@
 export const syncKeys = {
-  timer: {
-    minutesInput: 'timer.minutesInput',
-    secondsInput: 'timer.secondsInput',
-  },
+  weatherForecastData: 'weatherForecastData',
+  weatherForecastInterval: 'weatherForecastInterval',
 }

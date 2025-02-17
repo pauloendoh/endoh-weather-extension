@@ -1,22 +1,18 @@
 // https://github.com/microsoft/TypeScript/issues/11781#issuecomment-2558465179
 /// <reference lib="WebWorker" />
 
+import { messageTypes } from '../../../utils/messageTypes'
+import { getSync, setSync } from '../../../utils/syncStorageUtils'
+
 export type {}
 declare const self: ServiceWorkerGlobalScope
 
 const OFFSCREEN_DOCUMENT_PATH = '/offscreen.html'
-let creating: Promise<any> | null = null // A global promise to avoid concurrency issues
 
 export async function bgHandleGetGeolocation() {
   await setupOffscreenDocument(OFFSCREEN_DOCUMENT_PATH)
 
-  const geolocation: {
-    coords: {
-      latitude: number
-      longitude: number
-    }
-    toJSON: () => string
-  } = await chrome.runtime.sendMessage({
+  const geolocation: GeolocationPosition = await chrome.runtime.sendMessage({
     type: 'offscreen/get-geolocation',
     target: 'offscreen',
   })
@@ -36,22 +32,32 @@ async function hasDocument() {
 
 async function setupOffscreenDocument(path: string) {
   //if we do not have a document, we are already setup and can skip
+  const creatingOffScreenDocumentPromise = await getSync<Promise<any> | null>(
+    messageTypes.creatingOffScreenDocumentPromise
+  )
+  console.log(
+    'creatingOffScreenDocumentPromise',
+    creatingOffScreenDocumentPromise
+  )
   if (!(await hasDocument())) {
     // create offscreen document
-    if (creating) {
-      await creating
+    if (creatingOffScreenDocumentPromise) {
+      await creatingOffScreenDocumentPromise
     } else {
-      creating = chrome.offscreen.createDocument({
-        url: path,
-        reasons: [
-          chrome.offscreen.Reason.GEOLOCATION ||
-            chrome.offscreen.Reason.DOM_SCRAPING,
-        ],
-        justification: 'add justification for geolocation use here',
-      })
+      await setSync(
+        messageTypes.creatingOffScreenDocumentPromise,
+        chrome.offscreen.createDocument({
+          url: path,
+          reasons: [
+            chrome.offscreen.Reason.GEOLOCATION ||
+              chrome.offscreen.Reason.DOM_SCRAPING,
+          ],
+          justification: 'add justification for geolocation use here',
+        })
+      )
 
-      await creating
-      creating = null
+      await creatingOffScreenDocumentPromise
+      await setSync(messageTypes.creatingOffScreenDocumentPromise, null)
     }
   }
 }

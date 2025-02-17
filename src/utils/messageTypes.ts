@@ -1,9 +1,7 @@
 export const messageTypes = {
   alert: 'alert',
 
-  getGeolocation: 'get-geolocation',
+  creatingOffScreenDocumentPromise: 'creatingOffScreenDocumentPromise',
 
-  startTimer: 'startTimer',
-  cancelTimer: 'cancelTimer',
   getRemainingMs: 'getRemainingMs',
 } as const
