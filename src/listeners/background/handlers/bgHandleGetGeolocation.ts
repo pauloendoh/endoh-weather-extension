@@ -2,6 +2,7 @@
 /// <reference lib="WebWorker" />
 
 import { messageTypes } from '../../../utils/messageTypes'
+import { syncKeys } from '../../../utils/syncKeys'
 import { getSync, setSync } from '../../../utils/syncStorageUtils'
 
 export type {}
@@ -18,6 +19,8 @@ export async function bgHandleGetGeolocation() {
   })
 
   await closeOffscreenDocument()
+
+  await setSync(syncKeys.geolocation, geolocation)
   return geolocation
 }
 

@@ -32,7 +32,15 @@ export async function bgLoopWeatherForecast() {
 }
 
 async function fetchAndStoreForecastData() {
-  const geolocation = await bgHandleGetGeolocation()
+  const geolocation = await bgHandleGetGeolocation().catch(async (error) => {
+    const lastGeolocation = await getSync<GeolocationPosition>(
+      syncKeys.geolocation
+    )
+    if (lastGeolocation) {
+      return lastGeolocation
+    }
+    throw error
+  })
 
   const data: WeatherForecastItemOutput[] = await fetch(
     `https://endohio-server.herokuapp.com/weather-forecast?lat=${geolocation.coords.latitude}&lon=${geolocation.coords.longitude}`
