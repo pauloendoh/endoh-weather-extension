@@ -38,7 +38,7 @@ async function fetchAndStoreForecastData() {
     `https://endohio-server.herokuapp.com/weather-forecast?lat=${geolocation.coords.latitude}&lon=${geolocation.coords.longitude}`
   )
     .then((response) => response.json())
-    .then((data) => {
+    .then((data: WeatherForecastItemOutput[]) => {
       return data
     })
     .catch((error) => {

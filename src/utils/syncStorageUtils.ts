@@ -4,6 +4,7 @@ export const getSync = <T>(key: string) => {
   return new Promise<T | undefined>((resolve, reject) => {
     chrome.storage.sync.get(key, (result) => {
       if (chrome.runtime.lastError) {
+        console.log('chrome.runtime.lastError', chrome.runtime.lastError)
         reject(chrome.runtime.lastError)
       } else {
         resolve(result[key])
@@ -31,6 +32,7 @@ export const removeSync = (key: string) => {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.remove(key, () => {
       if (chrome.runtime.lastError) {
+        console.log('chrome.runtime.lastError', chrome.runtime.lastError)
         reject(chrome.runtime.lastError)
       } else {
         resolve(true)
